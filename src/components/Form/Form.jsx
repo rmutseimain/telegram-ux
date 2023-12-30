@@ -19,7 +19,7 @@ const Form = () => {
         }
 
         tg.sendData(JSON.stringify(data))
-    }, [tg, country, street, subject])
+    }, [tg])
 
     useEffect(() => {
         tg.WebApp.onEvent('mainButtonClicked', onSendData)
@@ -27,7 +27,7 @@ const Form = () => {
         return () => {
             tg.WebApp.offEvent('mainButtonClicked', onSendData)
         }
-    }, [tg, onSendData]);
+    }, [tg]);
 
     useEffect(() => {
         tg.MainButton.setParams({
