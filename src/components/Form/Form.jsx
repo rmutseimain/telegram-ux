@@ -14,6 +14,7 @@ const Form = () => {
             street,
             subject
         }
+        console.log(country)
         tg.sendData(JSON.stringify(data));
     }, [country, street, subject])
 
@@ -71,7 +72,68 @@ const Form = () => {
                 <option value={'physical'}>Физ. лицо</option>
                 <option value={'legal'}>Юр. лицо</option>
             </select>
+
+            <h3>Введите ваши данные</h3>
+            <input
+                className={'input'}
+                type="text"
+                placeholder={'Страна'}
+                value={country}
+                onChange={onChangeCountry}
+            />
+            <input
+                className={'input'}
+                type="text"
+                placeholder={'Улица'}
+                value={street}
+                onChange={onChangeStreet}
+            />
+            <select value={subject} onChange={onChangeSubject} className={'select'}>
+                <option value={'physical'}>Физ. лицо</option>
+                <option value={'legal'}>Юр. лицо</option>
+            </select>
+
+            <h3>Введите ваши данные</h3>
+            <input
+                className={'input'}
+                type="text"
+                placeholder={'Страна'}
+                value={country}
+                onChange={onChangeCountry}
+            />
+            <input
+                className={'input'}
+                type="text"
+                placeholder={'Улица'}
+                value={street}
+                onChange={onChangeStreet}
+            />
+            <select value={subject} onChange={onChangeSubject} className={'select'}>
+                <option value={'physical'}>Физ. лицо</option>
+                <option value={'legal'}>Юр. лицо</option>
+            </select>
+
+            <h3>Введите ваши данные</h3>
+            <input
+                className={'input'}
+                type="text"
+                placeholder={'Страна'}
+                value={country}
+                onChange={onChangeCountry}
+            />
+            <input
+                className={'input'}
+                type="text"
+                placeholder={'Улица'}
+                value={street}
+                onChange={onChangeStreet}
+            />
+            <select value={subject} onChange={onChangeSubject} className={'select'}>
+                <option value={'physical'}>Физ. лицо</option>
+                <option value={'legal'}>Юр. лицо</option>
+            </select>
         </div>
+
     );
 };
 
