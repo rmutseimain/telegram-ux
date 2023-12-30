@@ -1,11 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import './Form.css'
 import {useTelegram} from "../hooks/useTelegram";
-
+// const [countOfSleep, setCoundOfSleep ] = useState('');
+// const [qualityOfSleep, setQualityOfSleep ] = useState('');
+// const [energyLevel, setEnergyLevel ] = useState('');
 const Form = () => {
-    // const [countOfSleep, setCoundOfSleep ] = useState('');
-    // const [qualityOfSleep, setQualityOfSleep ] = useState('');
-    // const [energyLevel, setEnergyLevel ] = useState('');
+
     const [country, setCountry ] = useState('');
     const [street, setStreet ] = useState('');
     const [subject, setSubject ] = useState('');
