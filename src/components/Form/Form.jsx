@@ -21,6 +21,7 @@ const Form = () => {
             name: 'Уровень энергии:'
         }
     ]
+    const morningResults = []
 
     const  setUseState = (questions) => {
         questions.map( question => {
@@ -39,6 +40,7 @@ const Form = () => {
             survey: morning,
             queryId,
         }
+
         fetch('https://gym-bot-ytkj.onrender.com/morning', {
             method: 'POST',
             headers: {
@@ -46,7 +48,7 @@ const Form = () => {
             },
             body: JSON.stringify(data)
         })
-    }, [morning])
+    }, [morningResults])
 
     useEffect(() => {
         tg.onEvent('mainButtonClicked', onSendData)
@@ -59,10 +61,40 @@ const Form = () => {
     let isVisibleButton = useMemo(() => {
         let visible = true;
 
-        morning.map( item => {
-            if (ramda.isEmpty(item.changeState.state)){
+        morning.map( question => {
+            if (ramda.isEmpty(question.changeState.state)){
                 visible = false
             }
+
+            if (!ramda.isEmpty(question.changeState.state)) {
+
+
+                // adding item if not exist
+                if (morningResults.filter(item => item?.id === question.id).length === 0) {
+                    console.log(`Adding answer - ${question.name} - ${question.changeState.state}`)
+                    morningResults.push({
+                        id: question.id,
+                        name: question.name,
+                        state: question.changeState.state,
+                    })
+                    return
+                }
+
+
+                // updating items
+                morningResults.map(item => {
+                    if (item.id === question.id) {
+                        if (!item.state) {
+                            item.state = question.changeState.state
+                        }
+
+                        if (item.state && item.state !== question.changeState.state) {
+                            item.state = question.changeState.state
+                        }
+                    }
+                })
+            }
+
         })
 
         return visible
@@ -81,12 +113,6 @@ const Form = () => {
             text: 'Отправить данные'
         })
     }, [])
-
-    const survey = (e) => {
-        e.preventDefault()
-        // let results = getRefResults(morning).payload
-        // console.log(results)
-    }
 
     return (
         <form className={"form"}>
