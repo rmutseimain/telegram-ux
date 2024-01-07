@@ -41,6 +41,8 @@ const Form = () => {
             queryId,
         }
 
+        console.log(`Sending message to bot-server ${data}`)
+
         fetch('https://gym-bot-ytkj.onrender.com/morning', {
             method: 'POST',
             headers: {
