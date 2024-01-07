@@ -21,57 +21,30 @@ const Form = () => {
             name: 'Уровень энергии:'
         }
     ]
-    const morningResults = []
+    let morningResults = []
 
-    const  setUseState = (questions) => {
-        questions.map( question => {
-            const [ state, setState ] = useState('');
-            question.changeState = {
-                state: state,
-                changeState: (e) => setState(e.target.value)
-            }
-        })
+    const onChangeQuestion = (id, value, e) => {
+        e.preventDefault()
+
+        if (!morningResults.find( question => question.id === id)) {
+            let updateQuestion = morning.find( question => question.id === id)
+            morningResults.push({...updateQuestion, result: value})
+            return
+        }
+
+        morningResults.filter( question => question.id === id).map( item => item.result = value)
     }
 
-    setUseState(morning);
 
     // checking if visible
     let isVisibleButton = useMemo(() => {
         let visible = true;
 
         morning.map( question => {
-            if (ramda.isEmpty(question.changeState.state)){
+            if (ramda.isEmpty(question.result)){
                 visible = false
             }
 
-            if (!ramda.isEmpty(question.changeState.state)) {
-
-
-                // adding item if not exist
-                if (morningResults.filter(item => item?.id === question.id).length === 0) {
-                    console.log(`Adding answer - ${question.name} - ${question.changeState.state}`)
-                    morningResults.push({
-                        id: question.id,
-                        name: question.name,
-                        state: question.changeState.state,
-                    })
-                    return
-                }
-
-
-                // updating items
-                morningResults.map(item => {
-                    if (item.id === question.id) {
-                        if (!item.state) {
-                            item.state = question.changeState.state
-                        }
-
-                        if (item.state && item.state !== question.changeState.state) {
-                            item.state = question.changeState.state
-                        }
-                    }
-                })
-            }
 
         })
 
@@ -104,6 +77,11 @@ const Form = () => {
         })
     }, [morningResults])
 
+
+    useEffect(() => {
+
+    }, []);
+
     useEffect(() => {
         tg.onEvent('mainButtonClicked', onSendData)
         return () => {
@@ -120,7 +98,7 @@ const Form = () => {
     return (
         <form className={"form"}>
             {morning.map( item => {
-                return <Input question={item} key={item.id} />
+                return <Input question={item} onChangeQuestion={onChangeQuestion} key={item.id} />
             })}
         </form>
 
