@@ -35,30 +35,6 @@ const Form = () => {
 
     setUseState(morning);
 
-    const onSendData = useCallback(() => {
-        const data = {
-            survey: morning,
-            queryId,
-        }
-
-        console.log(`Sending message to bot-server ${data}`)
-
-        fetch('https://gym-bot-ytkj.onrender.com/morning', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data)
-        })
-    }, [morningResults])
-
-    useEffect(() => {
-        tg.onEvent('mainButtonClicked', onSendData)
-        return () => {
-            tg.offEvent('mainButtonClicked', onSendData)
-        }
-    }, [onSendData])
-
     // checking if visible
     let isVisibleButton = useMemo(() => {
         let visible = true;
@@ -109,6 +85,31 @@ const Form = () => {
             tg.MainButton.hide();
         }
     }, [isVisibleButton]);
+
+    // main button
+    const onSendData = useCallback(() => {
+        const data = {
+            survey: morningResults,
+            queryId,
+        }
+
+        console.log(`Sending message to bot-server ${data}`)
+
+        fetch('https://gym-bot-ytkj.onrender.com/morning', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data)
+        })
+    }, [morningResults])
+
+    useEffect(() => {
+        tg.onEvent('mainButtonClicked', onSendData)
+        return () => {
+            tg.offEvent('mainButtonClicked', onSendData)
+        }
+    }, [onSendData])
 
     useEffect(() => {
         tg.MainButton.setParams({
