@@ -3,7 +3,6 @@ const ramda = require('ramda');
 import './Form.css';
 import {useTelegram} from "../../hooks/useTelegram";
 import Input from "../Input/Input";
-import button from "../Button/Button";
 
 const Form = () => {
     const {tg} = useTelegram();
@@ -61,10 +60,8 @@ const Form = () => {
 
     useEffect(() => {
         if(isVisibleButton) {
-            // button.props.disable(false)
             tg.MainButton.show();
         } else {
-            // button.props.disable(true)
             tg.MainButton.hide();
         }
     }, [isVisibleButton]);
@@ -93,7 +90,6 @@ const Form = () => {
             {morning.map( item => {
                 return <Input question={item} key={item.id} />
             })}
-            <button onClick={survey} >Send</button>
         </form>
 
     );
