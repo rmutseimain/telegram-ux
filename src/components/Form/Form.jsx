@@ -36,16 +36,15 @@ const Form = () => {
     setUseState(morning);
 
     const onSendData = useCallback(() => {
-        console.log(' onSendData ------ executed~!!!!')
 
-        let payload = [];
-        morning.map( question => {
-            payload.push(ramda.pick(['id', 'result', 'name'], question))
-        })
+        let payload = {text: 'hello'};
+        // let payload = [];
+        // morning.map( question => {
+        //     payload.push(ramda.pick(['id', 'result', 'name'], question))
+        // })
 
-        console.log(payload)
         tg.sendData(JSON.stringify(payload));
-    }, [morning])
+    }, [])
 
     // checking if visible
     let isVisibleButton = useMemo(() => {
