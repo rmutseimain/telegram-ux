@@ -5,7 +5,7 @@ import {useTelegram} from "../../hooks/useTelegram";
 import Input from "../Input/Input";
 
 const Form = () => {
-    const {tg} = useTelegram();
+    const {tg, queryId} = useTelegram();
 
     const morning = [
         {
@@ -35,15 +35,25 @@ const Form = () => {
     setUseState(morning);
 
     const onSendData = useCallback(() => {
+        const data = {
+            survey: morning,
+            queryId,
+        }
+        fetch('https://gym-bot-ytkj.onrender.com/morning', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data)
+        })
+    }, [addedItems])
 
-        let payload = {text: 'hello'};
-        // let payload = [];
-        // morning.map( question => {
-        //     payload.push(ramda.pick(['id', 'result', 'name'], question))
-        // })
-
-        tg.sendData(JSON.stringify(payload));
-    }, [])
+    useEffect(() => {
+        tg.onEvent('mainButtonClicked', onSendData)
+        return () => {
+            tg.offEvent('mainButtonClicked', onSendData)
+        }
+    }, [onSendData])
 
     // checking if visible
     let isVisibleButton = useMemo(() => {
@@ -65,13 +75,6 @@ const Form = () => {
             tg.MainButton.hide();
         }
     }, [isVisibleButton]);
-
-    useEffect(() => {
-        tg.onEvent('mainButtonClicked', onSendData)
-        return () => {
-            tg.offEvent('mainButtonClicked', onSendData)
-        }
-    }, [onSendData])
 
     useEffect(() => {
         tg.MainButton.setParams({
