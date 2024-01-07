@@ -1,17 +1,16 @@
 .form {
     display: flex;
     flex-direction: column;
-    width: 100%;
     padding: 20px;
+    margin: 20px;
+    border: 1px solid teal;
 }
 
-.input {
-    width: 100%;
-    padding: 10px;
-    margin-top: 15px;
-}
-
-.select {
-    padding: 10px;
-    margin-top: 15px;
+.button {
+    padding: 5px 15px;
+    color: teal;
+    font-size: 14px;
+    background: transparent;
+    border: 1px solid teal;
+    cursor: pointer;
 }

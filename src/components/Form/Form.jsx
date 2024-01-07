@@ -1,22 +1,54 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
+const ramda = require('ramda');
 import './Form.css';
 import {useTelegram} from "../../hooks/useTelegram";
+import Input from "../Input/Input";
 
 const Form = () => {
-    const [country, setCountry] = useState('');
-    const [street, setStreet] = useState('');
-    const [subject, setSubject] = useState('physical');
     const {tg} = useTelegram();
 
-    const onSendData = useCallback(() => {
-        const data = {
-            country,
-            street,
-            subject
+    const morning = [
+        {
+            id: 1,
+            name: 'Количество часов сна:'
+        },
+        {
+            id: 2,
+            name: 'Качество сна:'
+        },
+        {
+            id: 3,
+            name: 'Уровень энергии:'
         }
-        console.log(country)
+    ]
+
+    const  setUseState = (questions) => {
+        questions.map( question => {
+            question.ref = useRef()
+        })
+    }
+
+    const getRefResults = (questions) => {
+        let results = []
+        let payload = [];
+
+        questions.map( question => {
+            results.push(question.ref?.current?.value)
+            question.result = question.ref?.current?.value
+            payload.push(ramda.pick(['id', 'result', 'name'], question))
+        })
+
+        return {results, payload}
+    }
+
+    setUseState(morning);
+
+    const onSendData = useCallback(() => {
+
+        const data = getRefResults(morning).payload
+        console.log(data)
         tg.sendData(JSON.stringify(data));
-    }, [country, street, subject])
+    }, getRefResults(morning).results)
 
     useEffect(() => {
         tg.onEvent('mainButtonClicked', onSendData)
@@ -32,107 +64,35 @@ const Form = () => {
     }, [])
 
     useEffect(() => {
-        if(!street || !country) {
-            tg.MainButton.hide();
-        } else {
+        let results = getRefResults(morning).results;
+        let visible = true;
+
+        results.map( item => {
+            if (ramda.isEmpty(item)){
+                visible = false
+            }
+        })
+
+        if(visible) {
             tg.MainButton.show();
+        } else {
+            tg.MainButton.hide();
         }
-    }, [country, street])
+    }, getRefResults(morning).results)
 
-    const onChangeCountry = (e) => {
-        setCountry(e.target.value)
-    }
-
-    const onChangeStreet = (e) => {
-        setStreet(e.target.value)
-    }
-
-    const onChangeSubject = (e) => {
-        setSubject(e.target.value)
+    const survey = (e) => {
+        e.preventDefault()
+        let results = getRefResults(morning).payload
+        console.log(results)
     }
 
     return (
-        <div className={"form"}>
-            <h3>Введите ваши данные</h3>
-            <input
-                className={'input'}
-                type="text"
-                placeholder={'Страна'}
-                value={country}
-                onChange={onChangeCountry}
-            />
-            <input
-                className={'input'}
-                type="text"
-                placeholder={'Улица'}
-                value={street}
-                onChange={onChangeStreet}
-            />
-            <select value={subject} onChange={onChangeSubject} className={'select'}>
-                <option value={'physical'}>Физ. лицо</option>
-                <option value={'legal'}>Юр. лицо</option>
-            </select>
-
-            <h3>Введите ваши данные</h3>
-            <input
-                className={'input'}
-                type="text"
-                placeholder={'Страна'}
-                value={country}
-                onChange={onChangeCountry}
-            />
-            <input
-                className={'input'}
-                type="text"
-                placeholder={'Улица'}
-                value={street}
-                onChange={onChangeStreet}
-            />
-            <select value={subject} onChange={onChangeSubject} className={'select'}>
-                <option value={'physical'}>Физ. лицо</option>
-                <option value={'legal'}>Юр. лицо</option>
-            </select>
-
-            <h3>Введите ваши данные</h3>
-            <input
-                className={'input'}
-                type="text"
-                placeholder={'Страна'}
-                value={country}
-                onChange={onChangeCountry}
-            />
-            <input
-                className={'input'}
-                type="text"
-                placeholder={'Улица'}
-                value={street}
-                onChange={onChangeStreet}
-            />
-            <select value={subject} onChange={onChangeSubject} className={'select'}>
-                <option value={'physical'}>Физ. лицо</option>
-                <option value={'legal'}>Юр. лицо</option>
-            </select>
-
-            <h3>Введите ваши данные</h3>
-            <input
-                className={'input'}
-                type="text"
-                placeholder={'Страна'}
-                value={country}
-                onChange={onChangeCountry}
-            />
-            <input
-                className={'input'}
-                type="text"
-                placeholder={'Улица'}
-                value={street}
-                onChange={onChangeStreet}
-            />
-            <select value={subject} onChange={onChangeSubject} className={'select'}>
-                <option value={'physical'}>Физ. лицо</option>
-                <option value={'legal'}>Юр. лицо</option>
-            </select>
-        </div>
+        <form className={"form"}>
+            {morning.map( item => {
+                return <Input question={item} key={item.id} />
+            })}
+            <button onClick={survey} >Send</button>
+        </form>
 
     );
 };
