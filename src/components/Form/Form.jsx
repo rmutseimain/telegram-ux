@@ -46,7 +46,7 @@ const Form = () => {
             },
             body: JSON.stringify(data)
         })
-    }, [addedItems])
+    }, [morning])
 
     useEffect(() => {
         tg.onEvent('mainButtonClicked', onSendData)
