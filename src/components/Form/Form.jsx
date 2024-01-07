@@ -1,8 +1,9 @@
-import React, {useCallback, useEffect, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 const ramda = require('ramda');
 import './Form.css';
 import {useTelegram} from "../../hooks/useTelegram";
 import Input from "../Input/Input";
+import button from "../Button/Button";
 
 const Form = () => {
     const {tg} = useTelegram();
@@ -24,31 +25,50 @@ const Form = () => {
 
     const  setUseState = (questions) => {
         questions.map( question => {
-            question.ref = useRef()
+            const [ state, setState ] = useState('');
+            question.changeState = {
+                state: state,
+                changeState: (e) => setState(e.target.value)
+            }
         })
-    }
-
-    const getRefResults = (questions) => {
-        let results = []
-        let payload = [];
-
-        questions.map( question => {
-            results.push(question.ref?.current?.value)
-            question.result = question.ref?.current?.value
-            payload.push(ramda.pick(['id', 'result', 'name'], question))
-        })
-
-        return {results, payload}
     }
 
     setUseState(morning);
 
     const onSendData = useCallback(() => {
+        console.log(' onSendData ------ executed~!!!!')
 
-        const data = getRefResults(morning).payload
-        console.log(data)
-        tg.sendData(JSON.stringify(data));
-    }, getRefResults(morning).results)
+        let payload = [];
+        morning.map( question => {
+            payload.push(ramda.pick(['id', 'result', 'name'], question))
+        })
+
+        console.log(payload)
+        tg.sendData(JSON.stringify(payload));
+    }, [morning])
+
+    // checking if visible
+    let isVisibleButton = useMemo(() => {
+        let visible = true;
+
+        morning.map( item => {
+            if (ramda.isEmpty(item.changeState.state)){
+                visible = false
+            }
+        })
+
+        return visible
+    }, [morning]);
+
+    useEffect(() => {
+        if(isVisibleButton) {
+            // button.props.disable(false)
+            tg.MainButton.show();
+        } else {
+            // button.props.disable(true)
+            tg.MainButton.hide();
+        }
+    }, [isVisibleButton]);
 
     useEffect(() => {
         tg.onEvent('mainButtonClicked', onSendData)
@@ -63,27 +83,10 @@ const Form = () => {
         })
     }, [])
 
-    useEffect(() => {
-        let results = getRefResults(morning).results;
-        let visible = true;
-
-        results.map( item => {
-            if (ramda.isEmpty(item)){
-                visible = false
-            }
-        })
-
-        if(visible) {
-            tg.MainButton.show();
-        } else {
-            tg.MainButton.hide();
-        }
-    }, getRefResults(morning).results)
-
     const survey = (e) => {
         e.preventDefault()
-        let results = getRefResults(morning).payload
-        console.log(results)
+        // let results = getRefResults(morning).payload
+        // console.log(results)
     }
 
     return (
