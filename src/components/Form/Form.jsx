@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useMemo, useState} from 'react';
+import React, {useCallback, useEffect, useMemo} from 'react';
 const ramda = require('ramda');
 import './Form.css';
 import {useTelegram} from "../../hooks/useTelegram";
@@ -6,7 +6,6 @@ import Input from "../Input/Input";
 
 const Form = () => {
     const {tg, queryId} = useTelegram();
-
     const morning = [
         {
             id: 1,
@@ -34,7 +33,6 @@ const Form = () => {
 
         morningResults.filter( question => question.id === id).map( item => item.result = value)
     }
-
 
     // checking if visible
     let isVisibleButton = useMemo(() => {
@@ -77,10 +75,29 @@ const Form = () => {
         })
     }, [morningResults])
 
+    const send = async (e) => {
+        e.preventDefault()
+        const data = {
+            survey: morningResults,
+            queryId,
+        }
 
-    useEffect(() => {
+        console.log(`Sending message to bot-server ${data}`)
 
-    }, []);
+        try {
+            await fetch('https://telegram-server-p1ci.onrender.com/morning', {
+                method: 'POST',
+                headers: {
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data)
+            })
+        } catch (e) {
+            console.log(e)
+        }
+    }
 
     useEffect(() => {
         tg.onEvent('mainButtonClicked', onSendData)
@@ -99,7 +116,9 @@ const Form = () => {
         <form className={"form"}>
             {morning.map( item => {
                 return <Input question={item} onChangeQuestion={onChangeQuestion} key={item.id} />
-            })}
+            })
+            }
+            <button onClick={send}>Send</button>
         </form>
 
     );
