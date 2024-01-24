@@ -4,7 +4,7 @@ import {useTelegram} from "../../hooks/useTelegram";
 import Input from "../Input/Input";
 
 const Form = () => {
-    const {tg, queryId} = useTelegram();
+    const {tg, queryId, user} = useTelegram();
     const morning = [
         {
             id: 1,
@@ -50,7 +50,7 @@ const Form = () => {
     const onSendData = useCallback(async () => {
         const data = {
             survey: morningResults,
-            queryId,
+            queryId: queryId ? queryId : '123',
         }
 
         console.log(`Sending message to bot-server ${data}`)
@@ -109,6 +109,8 @@ const Form = () => {
 
     return (
         <form className={"form"}>
+            <p>{queryId ? queryId : 'none'} </p>
+            <p>{user ? user : 'none'} </p>
             {morning.map( item => {
                 return <Input question={item} onChangeQuestion={onChangeQuestion} key={item.id} />
             })
