@@ -47,7 +47,7 @@ const Form = () => {
     }, [isVisibleButton]);
 
     // main button
-    const onSendData = useCallback(() => {
+    const onSendData = useCallback(async () => {
         const data = {
             survey: morningResults,
             queryId,
@@ -55,13 +55,19 @@ const Form = () => {
 
         console.log(`Sending message to bot-server ${data}`)
 
-        fetch('https://gym-bot-ytkj.onrender.com/morning', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data)
-        })
+        try {
+            await fetch('https://telegram-server-p1ci.onrender.com/morning', {
+                method: 'POST',
+                headers: {
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data)
+            })
+        } catch (e) {
+            console.log(e)
+        }
     }, [morningResults])
 
     const send = async (e) => {
