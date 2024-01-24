@@ -1,5 +1,4 @@
-import React, {useCallback, useEffect, useMemo} from 'react';
-const ramda = require('ramda');
+import React, {useCallback, useEffect, useState} from 'react';
 import './Form.css';
 import {useTelegram} from "../../hooks/useTelegram";
 import Input from "../Input/Input";
@@ -21,6 +20,7 @@ const Form = () => {
         }
     ]
     let morningResults = []
+    let [isVisibleButton, setIsVisibleButton] = useState(false)
 
     const onChangeQuestion = (id, value, e) => {
         e.preventDefault()
@@ -28,26 +28,15 @@ const Form = () => {
         if (!morningResults.find( question => question.id === id)) {
             let updateQuestion = morning.find( question => question.id === id)
             morningResults.push({...updateQuestion, result: value})
+
+            // show main button when answered on all questions
+            morningResults.length === morning.length ? setIsVisibleButton(true) : setIsVisibleButton(false)
             return
         }
 
         morningResults.filter( question => question.id === id).map( item => item.result = value)
+
     }
-
-    // checking if visible
-    let isVisibleButton = useMemo(() => {
-        let visible = true;
-
-        morning.map( question => {
-            if (ramda.isEmpty(question.result)){
-                visible = false
-            }
-
-
-        })
-
-        return visible
-    }, [morning]);
 
     useEffect(() => {
         if(isVisibleButton) {
