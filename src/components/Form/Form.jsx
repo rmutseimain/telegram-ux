@@ -50,10 +50,8 @@ const Form = () => {
     const onSendData = useCallback(async () => {
         const data = {
             survey: morningResults,
-            queryId: queryId ? queryId : '123',
+            queryId
         }
-
-        console.log(`Sending message to bot-server ${data}`)
 
         try {
             await fetch('https://telegram-server-p1ci.onrender.com/morning', {
@@ -68,7 +66,7 @@ const Form = () => {
         } catch (e) {
             console.log(e)
         }
-    }, [morningResults])
+    }, [morningResults, queryId])
 
     const send = async (e) => {
         e.preventDefault()
@@ -80,15 +78,17 @@ const Form = () => {
         console.log(`Sending message to bot-server ${data}`)
 
         try {
-            await fetch('https://telegram-server-p1ci.onrender.com/morning', {
-                method: 'POST',
-                headers: {
-                    'Access-Control-Allow-Origin': '*',
-                    'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(data)
-            })
+            await axios.post('http://localhost:8081/morning', data)
+
+            // await fetch('http://localhost:8081/morning', {
+            //     method: 'POST',
+            //     headers: {
+            //         // 'Access-Control-Allow-Origin': '*',
+            //         // 'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+            //         "Content-Type": "application/json"
+            //     },
+            //     body: JSON.stringify(data)
+            // })
         } catch (e) {
             console.log(e)
         }
