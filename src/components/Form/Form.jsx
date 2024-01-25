@@ -19,7 +19,9 @@ const Form = () => {
             name: 'Уровень энергии:'
         }
     ]
-    let morningResults = []
+    // let morningResults = []
+
+    let [morningResults, setMorningResults] = useState([])
     let [isVisibleButton, setIsVisibleButton] = useState(false)
 
     const onChangeQuestion = (id, value, e) => {
@@ -27,7 +29,7 @@ const Form = () => {
 
         if (!morningResults.find( question => question.id === id)) {
             let updateQuestion = morning.find( question => question.id === id)
-            morningResults.push({...updateQuestion, result: value})
+            setMorningResults([...morningResults, {...updateQuestion, result: value }])
 
             // show main button when answered on all questions
             morningResults.length === morning.length ? setIsVisibleButton(true) : setIsVisibleButton(false)
@@ -78,17 +80,17 @@ const Form = () => {
         console.log(`Sending message to bot-server ${data}`)
 
         try {
-            await axios.post('http://localhost:8081/morning', data)
+            // await axios.post('http://localhost:8081/morning', data)
 
-            // await fetch('http://localhost:8081/morning', {
-            //     method: 'POST',
-            //     headers: {
-            //         // 'Access-Control-Allow-Origin': '*',
-            //         // 'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-            //         "Content-Type": "application/json"
-            //     },
-            //     body: JSON.stringify(data)
-            // })
+            await fetch('http://localhost:8081/morning', {
+                method: 'POST',
+                headers: {
+                    // 'Access-Control-Allow-Origin': '*',
+                    // 'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data)
+            })
         } catch (e) {
             console.log(e)
         }
