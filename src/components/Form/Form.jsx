@@ -19,7 +19,6 @@ const Form = () => {
             name: 'Уровень энергии:'
         }
     ]
-    // let morningResults = []
 
     let [morningResults, setMorningResults] = useState([])
     let [isVisibleButton, setIsVisibleButton] = useState(false)
@@ -28,25 +27,22 @@ const Form = () => {
         e.preventDefault()
 
         if (!morningResults.find( question => question.id === id)) {
+
             let updateQuestion = morning.find( question => question.id === id)
-            setMorningResults([...morningResults, {...updateQuestion, result: value }])
+            let finalStatus = [{...updateQuestion, result: value }]
+
+            morningResults.length === 0 ? setMorningResults(finalStatus) : setMorningResults([...morningResults, ...finalStatus])
 
             // show main button when answered on all questions
             morningResults.length === morning.length ? setIsVisibleButton(true) : setIsVisibleButton(false)
             return
         }
 
-        morningResults.filter( question => question.id === id).map( item => item.result = value)
-
+        let updatedQuestion = morningResults.filter( question => question.id === id)
+        let notUpdatedQuestion = morningResults.filter( question => question.id !== id)
+        updatedQuestion.map( item => item.result = value)
+        setMorningResults([...notUpdatedQuestion, ...updatedQuestion])
     }
-
-    useEffect(() => {
-        if(isVisibleButton) {
-            tg.MainButton.show();
-        } else {
-            tg.MainButton.hide();
-        }
-    }, [isVisibleButton]);
 
     // main button
     const onSendData = useCallback(async () => {
@@ -80,8 +76,6 @@ const Form = () => {
         console.log(`Sending message to bot-server ${data}`)
 
         try {
-            // await axios.post('http://localhost:8081/morning', data)
-
             await fetch('http://localhost:8081/morning', {
                 method: 'POST',
                 headers: {
@@ -97,11 +91,23 @@ const Form = () => {
     }
 
     useEffect(() => {
+        if(isVisibleButton) {
+            tg.MainButton.show();
+        } else {
+            tg.MainButton.hide();
+        }
+    }, [isVisibleButton]);
+
+    useEffect(() => {
         tg.onEvent('mainButtonClicked', onSendData)
         return () => {
             tg.offEvent('mainButtonClicked', onSendData)
         }
     }, [onSendData])
+
+    useEffect(() => {
+        morningResults.length === morning.length ? setIsVisibleButton(true) : setIsVisibleButton(false)
+    }, [morningResults])
 
     useEffect(() => {
         tg.MainButton.setParams({
