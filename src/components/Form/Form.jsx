@@ -1,24 +1,12 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import './Form.css';
 import {useTelegram} from "../../hooks/useTelegram";
+import './Form.css';
 import Input from "../Input/Input";
 
-const Form = () => {
+const Form = ( props ) => {
+    const { questionList } = props;
+
     const {tg, queryId} = useTelegram();
-    const morning = [
-        {
-            id: 1,
-            name: 'Количество часов сна:'
-        },
-        {
-            id: 2,
-            name: 'Качество сна:'
-        },
-        {
-            id: 3,
-            name: 'Уровень энергии:'
-        }
-    ]
 
     let [morningResults, setMorningResults] = useState([])
     let [isVisibleButton, setIsVisibleButton] = useState(false)
@@ -28,13 +16,13 @@ const Form = () => {
 
         if (!morningResults.find( question => question.id === id)) {
 
-            let updateQuestion = morning.find( question => question.id === id)
+            let updateQuestion = questionList.find( question => question.id === id)
             let finalStatus = [{...updateQuestion, result: value }]
 
             morningResults.length === 0 ? setMorningResults(finalStatus) : setMorningResults([...morningResults, ...finalStatus])
 
             // show main button when answered on all questions
-            morningResults.length === morning.length ? setIsVisibleButton(true) : setIsVisibleButton(false)
+            morningResults.length === questionList.length ? setIsVisibleButton(true) : setIsVisibleButton(false)
             return
         }
 
@@ -106,7 +94,7 @@ const Form = () => {
     }, [onSendData])
 
     useEffect(() => {
-        morningResults.length === morning.length ? setIsVisibleButton(true) : setIsVisibleButton(false)
+        morningResults.length === questionList.length ? setIsVisibleButton(true) : setIsVisibleButton(false)
     }, [morningResults])
 
     useEffect(() => {
@@ -117,8 +105,7 @@ const Form = () => {
 
     return (
         <form className={"form"}>
-            <p>{queryId ? queryId : 'none'} </p>
-            {morning.map( item => {
+            {questionList.map( item => {
                 return <Input question={item} onChangeQuestion={onChangeQuestion} key={item.id} />
             })
             }
