@@ -4,6 +4,7 @@ import {useTelegram} from "./hooks/useTelegram";
 import Header from "./components/Header/Header";
 import Home from "./components/Home/Home"
 import Form from "./components/Form/Form"
+import FeatureForm from "./components/FeatureForm/FeatureForm"
 import {useSelector} from "react-redux";
 
 function App() {
@@ -50,6 +51,7 @@ function App() {
     ]
     const pageList = [
         {name: 'Home', page: <Home />},
+        {name: 'Features', page: <FeatureForm questionList={[...morning, ...evening]} />},
         {name: 'Morning', page: <Form questionList={morning} />},
         {name: 'Evening', page: <Form questionList={evening}/>},
     ]
