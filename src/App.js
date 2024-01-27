@@ -6,47 +6,78 @@ import Home from "./components/Home/Home"
 import Form from "./components/Form/Form"
 import FeatureForm from "./components/FeatureForm/FeatureForm"
 import {useSelector} from "react-redux";
+import uuid from 'react-native-uuid';
 
 function App() {
     const {tg} = useTelegram();
     const morning = [
         {
             id: 1,
-            name: 'Количество часов сна:'
+            type: 'question',
+            name: 'Количество часов сна:',
+            key: uuid.v4()
         },
         {
             id: 2,
-            name: 'Качество сна:'
+            name: 'Качество сна:',
+            type: 'question',
+            key: uuid.v4()
         },
         {
             id: 3,
-            name: 'Уровень энергии:'
+            name: 'Уровень энергии:',
+            type: 'question',
+            key: uuid.v4()
+        },
+        {
+            id: 4,
+            name: 'Утреннее взвешивание',
+            type: 'file',
+            key: uuid.v4()
         }
     ]
     const evening = [
         {
             id: 1,
-            name: 'Уровень стресса:'
+            name: 'Уровень стресса:',
+            type: 'question',
+            key: uuid.v4()
         },
         {
             id: 2,
-            name: 'Уровень физической нагрузки:'
+            name: 'Уровень физической нагрузки:',
+            type: 'question',
+            key: uuid.v4()
         },
         {
             id: 3,
-            name: 'Удовлетворенность рационом:'
+            name: 'Удовлетворенность рационом:',
+            type: 'question',
+            key: uuid.v4()
         },
         {
             id: 4,
-            name: 'Насыщенность рационом:'
+            name: 'Насыщенность рационом:',
+            type: 'question',
+            key: uuid.v4()
         },
         {
             id: 5,
-            name: 'Количество приемов пищи:'
+            name: 'Количество приемов пищи:',
+            type: 'question',
+            key: uuid.v4()
         },
         {
             id: 6,
-            name: 'Количество шагов:'
+            name: 'Количество шагов:',
+            type: 'question',
+            key: uuid.v4()
+        },
+        {
+            id: 7,
+            name: 'Калорийность',
+            type: 'file',
+            key: uuid.v4()
         }
     ]
     const pageList = [
