@@ -7,32 +7,33 @@ import Form from "./components/Form/Form"
 import FeatureForm from "./components/FeatureForm/FeatureForm"
 import {useSelector} from "react-redux";
 import uuid from 'react-native-uuid';
+import {TYPE_OF_QUESTION} from "./constans";
 
 function App() {
     const {tg} = useTelegram();
     const morning = [
         {
             id: 1,
-            type: 'question',
+            type: TYPE_OF_QUESTION.QUESTION_LIST,
             name: 'Количество часов сна:',
             key: uuid.v4()
         },
         {
             id: 2,
             name: 'Качество сна:',
-            type: 'question',
+            type: TYPE_OF_QUESTION.QUESTION_LIST,
             key: uuid.v4()
         },
         {
             id: 3,
             name: 'Уровень энергии:',
-            type: 'question',
+            type: TYPE_OF_QUESTION.QUESTION_LIST,
             key: uuid.v4()
         },
         {
             id: 4,
             name: 'Утреннее взвешивание',
-            type: 'file',
+            type: TYPE_OF_QUESTION.FILE,
             key: uuid.v4()
         }
     ]
@@ -40,43 +41,43 @@ function App() {
         {
             id: 1,
             name: 'Уровень стресса:',
-            type: 'question',
+            type: TYPE_OF_QUESTION.QUESTION_LIST,
             key: uuid.v4()
         },
         {
             id: 2,
             name: 'Уровень физической нагрузки:',
-            type: 'question',
+            type: TYPE_OF_QUESTION.QUESTION_LIST,
             key: uuid.v4()
         },
         {
             id: 3,
             name: 'Удовлетворенность рационом:',
-            type: 'question',
+            type: TYPE_OF_QUESTION.QUESTION_LIST,
             key: uuid.v4()
         },
         {
             id: 4,
             name: 'Насыщенность рационом:',
-            type: 'question',
+            type: TYPE_OF_QUESTION.QUESTION_LIST,
             key: uuid.v4()
         },
         {
             id: 5,
             name: 'Количество приемов пищи:',
-            type: 'question',
+            type: TYPE_OF_QUESTION.QUESTION_LIST,
             key: uuid.v4()
         },
         {
             id: 6,
             name: 'Количество шагов:',
-            type: 'question',
+            type: TYPE_OF_QUESTION.QUESTION_INPUT,
             key: uuid.v4()
         },
         {
             id: 7,
             name: 'Калорийность',
-            type: 'file',
+            type: TYPE_OF_QUESTION.FILE,
             key: uuid.v4()
         }
     ]

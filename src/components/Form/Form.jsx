@@ -3,6 +3,8 @@ import Features from "../Features/Features";
 import UploadImage from "../UploadImage/UploadImage";
 import {useTelegram} from "../../hooks/useTelegram";
 import './Form.css';
+import {TYPE_OF_QUESTION} from "../../constans";
+import Input from "../Input/Input";
 
 const Form = ( props ) => {
     const { questionList } = props;
@@ -80,7 +82,7 @@ const Form = ( props ) => {
         console.log(`Sending message to bot-server ${formData}`)
 
         try {
-            await fetch('http://localhost:8082/morning', {
+            await fetch('http://localhost:8080/morning', {
                 method: 'POST',
                 body: formData
             })
@@ -120,10 +122,15 @@ const Form = ( props ) => {
     return (
         <form className={"form"}>
             {questionList.map( item => {
-                if (item.type === 'question') {
+                if (item.type === TYPE_OF_QUESTION.QUESTION_LIST) {
                     return <Features question={item} onChangeQuestion={onChangeQuestion} key={item.key}/>
                 }
-                if (item.type === 'file') {
+
+                if (item.type === TYPE_OF_QUESTION.QUESTION_INPUT) {
+                    return <Input question={item} onChangeQuestion={onChangeQuestion} key={item.key}/>
+                }
+
+                if (item.type === TYPE_OF_QUESTION.FILE) {
                     return <UploadImage ref={getFile} question={item} onChangeQuestion={onChangeQuestion} key={item.key}/>
                 }
             })}

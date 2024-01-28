@@ -2,6 +2,8 @@ import React, {useState} from "react";
 
 function Features(props) {
     const [ state, setState ] = useState('');
+    let { question, onChangeQuestion } = props
+
     const listOfOptions = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
     return (
@@ -11,7 +13,7 @@ function Features(props) {
                        width: '80%'
                     }}
             >
-                {props.question.id}. {props.question.name}
+                {question.id}. {question.name}
             </label>
             <select className="form-select" id="inputGroupSelect01"
                     style={{
@@ -21,7 +23,7 @@ function Features(props) {
                     onChange={(e) => {
                         console.log(e.target.value)
                         setState(e.target.value)
-                        props.onChangeQuestion(props.question.id, e.target.value, e)
+                        onChangeQuestion(question.id, e.target.value, e)
                     }}
             >
                 {listOfOptions.map( item => {
