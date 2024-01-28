@@ -97,13 +97,13 @@ function App() {
     useEffect(() => {
         const interval = setInterval(async () => {
             try {
-                await fetch('https://telegram-server-p1ci.onrender.com', {
+                    await fetch(process.env.SERVER_HOST, {
                     method: 'GET'
                 })
             } catch (e) {
                 console.log('Server unhealthy')
             }
-        }, 1000);
+        }, 60 * 1000);
         return () => clearInterval(interval);
     }, []);
 
