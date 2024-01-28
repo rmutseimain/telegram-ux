@@ -94,6 +94,19 @@ function App() {
         tg.ready();
     }, [])
 
+    useEffect(() => {
+        const interval = setInterval(async () => {
+            try {
+                await fetch('https://telegram-server-p1ci.onrender.com', {
+                    method: 'GET'
+                })
+            } catch (e) {
+                console.log('Server unhealthy')
+            }
+        }, 1000);
+        return () => clearInterval(interval);
+    }, []);
+
     const getPage = (pageName) => {
         if (!pageName) return pageList[0].page
         return pageList.filter( item => item.name === pageName)[0]?.page
